@@ -20,7 +20,7 @@ export default [
       '.turbo/**',
       'dist/**',
       '*.config.mjs', // exclude config files from ESLint
-      '*.config.js',  // exclude JS config files too
+      '*.config.js', // exclude JS config files too
     ],
   },
 
@@ -30,7 +30,7 @@ export default [
     'next/typescript',
     'airbnb',
     'airbnb/hooks',
-    'airbnb-typescript'
+    'airbnb-typescript',
   ),
 
   // ensure parserOptions.project is passed
@@ -64,4 +64,4 @@ export default [
       'no-console': 'warn',
     },
   },
-];   
+];
