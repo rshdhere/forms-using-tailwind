@@ -9,6 +9,7 @@
     "lint": "eslint",
     "lint:fix": "eslint . --fix",
     "format": "prettier . --write",
+    "format:check": " prettier --check .",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -45,7 +46,8 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "eslint --fix --cache --max-warnings=0"
+      "eslint --fix --cache --max-warnings=0",
+      "prettier --write"
     ],
     "*.{json,css,md}": [
       "prettier --write"
