@@ -31,6 +31,7 @@ export default [
     'airbnb',
     'airbnb/hooks',
     'airbnb-typescript',
+    'plugin:prettier/recommended',
   ),
 
   // ensure parserOptions.project is passed
