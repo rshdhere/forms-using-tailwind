@@ -1,13 +1,15 @@
 import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
-import { FlatCompat } from '@eslint/eslintrc';
+
+import tsParser from '@typescript-eslint/parser';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
+import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
+import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
+import importPlugin from 'eslint-plugin-import';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
 
 export default [
   {
@@ -16,53 +18,68 @@ export default [
       '.next/**',
       'out/**',
       'build/**',
-      'next-env.d.ts',
-      '.turbo/**',
       'dist/**',
-      '*.config.mjs', // exclude config files from ESLint
-      '*.config.js', // exclude JS config files too
+      '.turbo/**',
+      'next-env.d.ts',
+      '*.config.mjs',
+      '*.config.js',
     ],
   },
 
-  // extend configs: Next.js + Airbnb + TypeScript
-  ...compat.extends(
-    'next/core-web-vitals',
-    'next/typescript',
-    'airbnb',
-    'airbnb/hooks',
-    'airbnb-typescript',
-    'plugin:prettier/recommended',
-  ),
-
-  // ensure parserOptions.project is passed
-  ...compat.config({
-    parserOptions: {
-      project: resolve(__dirname, './tsconfig.json'),
-      tsconfigRootDir: __dirname,
-    },
-  }),
-
-  // override problematic rules that cause "rule not found" errors
-  // Some older versions of eslint-config-airbnb-typescript enable rules
-  // like @typescript-eslint/brace-style, which don't exist in @typescript-eslint
+  // All TS/JS files — parser without type info
   {
+    files: ['**/*.{ts,tsx,js,jsx}'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: 2025,
+        sourceType: 'module',
+      },
+    },
+    plugins: {
+      '@typescript-eslint': tsPlugin,
+      react: reactPlugin,
+      'react-hooks': reactHooksPlugin,
+      'jsx-a11y': jsxA11yPlugin,
+      import: importPlugin,
+    },
     rules: {
-      // remove or replace invalid rules
-      '@typescript-eslint/brace-style': 'off', // Not a real rule in @typescript-eslint
-      'brace-style': ['error', '1tbs', { allowSingleLine: true }], // Use base ESLint rule
-
-      // Optional: Fix common conflicts
-      'import/extensions': [
+      '@typescript-eslint/brace-style': 'off',
+      'brace-style': ['error', '1tbs', { allowSingleLine: true }],
+      'react/react-in-jsx-scope': 'off',
+      'react/jsx-props-no-spreading': 'warn',
+      'jsx-a11y/label-has-associated-control': [
         'error',
-        'ignorePackages',
+        { required: { some: ['nesting', 'id'] } },
+      ],
+      'import/extensions': 'off', // ⚠ disable for TS files
+      'import/no-unresolved': 'off', // ⚠ disable for TS files
+      'no-console': 'warn',
+    },
+  },
+
+  // Pages: function declarations
+  {
+    files: ['pages/**/*.{ts,tsx,js,jsx}'],
+    rules: {
+      'react/function-component-definition': [
+        'error',
+        { namedComponents: 'function-declaration' },
+      ],
+    },
+  },
+
+  // Components: arrow functions
+  {
+    files: ['components/**/*.{ts,tsx,js,jsx}'],
+    rules: {
+      'react/function-component-definition': [
+        'error',
         {
-          ts: 'never',
-          tsx: 'never',
+          namedComponents: 'arrow-function',
+          unnamedComponents: 'arrow-function',
         },
       ],
-      'react/react-in-jsx-scope': 'off', // Not needed in Next.js (React is auto-imported)
-      'react/jsx-props-no-spreading': 'warn',
-      'no-console': 'warn',
     },
   },
 ];
