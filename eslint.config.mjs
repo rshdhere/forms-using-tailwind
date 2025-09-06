@@ -13,6 +13,9 @@ const __dirname = dirname(__filename);
 
 export default [
   {
+    // ----------------------
+    // Ignore build artifacts & config files
+    // ----------------------
     ignores: [
       'node_modules/**',
       '.next/**',
@@ -58,7 +61,9 @@ export default [
     },
   },
 
+  // ----------------------
   // Pages: function declarations
+  // ----------------------
   {
     files: ['pages/**/*.{ts,tsx,js,jsx}'],
     rules: {
@@ -69,7 +74,9 @@ export default [
     },
   },
 
+  // ----------------------
   // Components: arrow functions
+  // ----------------------
   {
     files: ['components/**/*.{ts,tsx,js,jsx}'],
     rules: {
