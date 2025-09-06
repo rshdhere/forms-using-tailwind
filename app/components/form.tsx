@@ -47,7 +47,12 @@ export default function Form() {
           >
             Email
           </Label>
-          <Input name="email" type="text" placeholder="Enter your email" />
+          <Input
+            name="email"
+            type="email"
+            placeholder="Enter your email"
+            className="invalid:border-red-500 invalid:shadow-none"
+          />
         </Group>
         <Group>
           <Label
@@ -106,7 +111,7 @@ const Input = ({
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
       className={cn(
-        'shadow-input rounded-lg border-transparent bg-white px-4 py-2 transition-all duration-200 focus:border-neutral-400 focus:ring-2 focus:ring-neutral-300 focus:ring-offset-2 focus:outline-none',
+        'shadow-input rounded-lg border border-transparent bg-white px-4 py-2 transition-all duration-200 focus:border-neutral-400 focus:ring-2 focus:ring-neutral-300 focus:ring-offset-2 focus:outline-none',
         className,
       )}
     />
